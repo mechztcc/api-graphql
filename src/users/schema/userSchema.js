@@ -19,6 +19,8 @@ const userSchema = buildSchema(`
 
     type Mutation {
         create(name: String!, second_name: String!, email: String!, birth: String!, payment: String!, vip: Boolean, profile: Int!): User
+        
+        delete(id: ID!): [User]
     }
 `);
 

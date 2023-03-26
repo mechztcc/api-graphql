@@ -1,6 +1,6 @@
 const { faker } = require("@faker-js/faker");
 
-const users = [
+let users = [
   {
     id: 1,
     name: faker.name.firstName(),
@@ -82,8 +82,8 @@ const usersResolvers = {
   Mutation: {
     create(_, { name, second_name, email, birth, payment, vip, profile }) {
       const emailExists = users.some((el) => el.email === email);
-      if(emailExists) {
-        throw new Error('Email already in use.')
+      if (emailExists) {
+        throw new Error("Email already in use.");
       }
 
       const user = {
@@ -98,6 +98,15 @@ const usersResolvers = {
       };
       users.push(user);
       return user;
+    },
+
+    delete(_, { id }) {
+      const user = users.some((el) => el.id == id);
+      if (!user) {
+        throw new Error("User not found.");
+      }
+      users = users.filter((el) => el.id != id);
+      return users;
     },
   },
 };
