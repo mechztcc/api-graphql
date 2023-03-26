@@ -12,14 +12,23 @@ const userSchema = buildSchema(`
         updatedAt: String!
     }
 
+    input UserCreate {
+        name: String!, 
+        second_name: String!, 
+        email: String!, 
+        birth: String!, 
+        payment: String!, 
+        vip: Boolean, 
+        profile: Int!
+    }
+
     type Query {
         users: [User]!
         user(id: ID!): User
     }
 
     type Mutation {
-        create(name: String!, second_name: String!, email: String!, birth: String!, payment: String!, vip: Boolean, profile: Int!): User
-        
+        create(data: UserCreate!): User
         delete(id: ID!): [User]
     }
 `);
