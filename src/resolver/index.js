@@ -1,5 +1,4 @@
-const usersResolvers = require("./users/resolvers/userResolvers");
-
+const usersResolvers = require("../users/resolvers/userResolvers");
 const resolvers = [usersResolvers];
 
 module.exports = resolvers;
