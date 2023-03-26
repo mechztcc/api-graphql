@@ -81,6 +81,11 @@ const usersResolvers = {
 
   Mutation: {
     create(_, { name, second_name, email, birth, payment, vip, profile }) {
+      const emailExists = users.some((el) => el.email === email);
+      if(emailExists) {
+        throw new Error('Email already in use.')
+      }
+
       const user = {
         id: faker.random.numeric(),
         name,
