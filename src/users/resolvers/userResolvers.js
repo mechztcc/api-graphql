@@ -61,7 +61,7 @@ const profiles = [
 const usersResolvers = {
   User: {
     profile(user) {
-      const profile = profiles.find((el) => el.id == user.id);
+      const profile = profiles.find((el) => el.id == user.profile);
       return profile.name;
     },
     createdAt() {
