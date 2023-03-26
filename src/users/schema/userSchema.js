@@ -6,6 +6,7 @@ const userSchema = buildSchema(`
         id: ID!
         name: String!
         email: String!
+        profile: String!
         password: String!
         createdAt: String!
         updatedAt: String!
