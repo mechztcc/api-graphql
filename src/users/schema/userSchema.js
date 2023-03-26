@@ -16,6 +16,10 @@ const userSchema = buildSchema(`
         users: [User]!
         user(id: ID!): User
     }
+
+    type Mutation {
+        create(name: String!, second_name: String!, email: String!, birth: String!, payment: String!, vip: Boolean, profile: String!): User
+    }
 `);
 
 module.exports = userSchema;

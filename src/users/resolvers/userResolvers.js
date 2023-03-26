@@ -64,6 +64,9 @@ const usersResolvers = {
       const profile = profiles.find((el) => el.id == user.id);
       return profile.name;
     },
+    createdAt() {
+      return new Date().toDateString();
+    },
   },
 
   Query: {
@@ -73,6 +76,23 @@ const usersResolvers = {
 
     user(_, { id }) {
       return users.find((el) => el.id == id);
+    },
+  },
+
+  Mutation: {
+    create(_, { name, second_name, email, birth, payment, vip, profile }) {
+      const user = {
+        id: faker.random.numeric(),
+        name,
+        second_name,
+        email,
+        birth,
+        payment,
+        vip,
+        profile,
+      };
+      users.push(user);
+      return user;
     },
   },
 };
