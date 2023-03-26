@@ -12,11 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.5.0",
+    "@prisma/client": "^4.11.0",
     "graphql": "^16.6.0",
     "graphql-tools": "^8.3.19"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "prisma": "^4.11.0"
   }
 }
