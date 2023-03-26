@@ -2,7 +2,7 @@ const { faker } = require("@faker-js/faker");
 
 const users = [
   {
-    id: faker.random.numeric(),
+    id: 1,
     name: faker.name.firstName(),
     second_name: faker.name.firstName(),
     email: faker.internet.email(),
@@ -69,6 +69,10 @@ const usersResolvers = {
   Query: {
     users() {
       return users;
+    },
+
+    user(_, { id }) {
+      return users.find((el) => el.id == id);
     },
   },
 };
