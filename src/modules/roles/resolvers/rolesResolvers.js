@@ -17,6 +17,18 @@ const rolesResolvers = {
       return roles;
     },
   },
+
+  Mutation: {
+    createRole(_, { name }) {
+      const role = {
+        id: faker.random.numeric(),
+        name,
+      };
+
+      roles.push(role);
+      return role;
+    },
+  },
 };
 
 module.exports = rolesResolvers;

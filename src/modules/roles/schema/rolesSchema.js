@@ -10,6 +10,11 @@ const rolesSchema = buildSchema(`
         roles: [Role]!
     }
 
+    type Mutation {
+        createRole(name: String!): Role
+    }
+
+
 `);
 
 module.exports = rolesSchema;
