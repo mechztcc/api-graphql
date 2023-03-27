@@ -1,6 +1,8 @@
 const { faker } = require("@faker-js/faker");
 const { PrismaClient } = require("@prisma/client");
 const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
+const secrets = require("../../../setup/secrets/index");
 
 const prisma = new PrismaClient();
 
@@ -32,7 +34,7 @@ const usersResolvers = {
       const { name, second_name, email, password, birth, payment, vip, role } =
         data;
 
-      const hashedPass = await argon2.hash("password");
+      const hashedPass = await argon2.hash(password);
 
       const roleExists = await prisma.roles.findUnique({ where: { id: role } });
 
@@ -56,6 +58,21 @@ const usersResolvers = {
       await prisma.users.delete({ where: { id: Number(id) } });
       const users = prisma.users.findMany();
       return users;
+    },
+
+    async auth(_, { email, password }) {
+      const user = await prisma.users.findUnique({ where: { email } });
+
+      const verify = await argon2.verify(user.password, password);
+      if (!verify) {
+      }
+
+      const token = jwt.sign({}, secrets.hash, {
+        subject: String(user.id),
+        expiresIn: "2d",
+      });
+
+      return { token };
     },
   },
 };

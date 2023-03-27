@@ -15,7 +15,8 @@
     "@prisma/client": "^4.11.0",
     "argon2": "^0.30.3",
     "graphql": "^16.6.0",
-    "graphql-tools": "^8.3.19"
+    "graphql-tools": "^8.3.19",
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

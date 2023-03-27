@@ -12,6 +12,10 @@ const userSchema = buildSchema(`
         updatedAt: String!
     }
 
+    type Session {
+        token: String!
+    }
+
     input UserCreate {
         name: String!, 
         second_name: String!, 
@@ -31,6 +35,8 @@ const userSchema = buildSchema(`
     type Mutation {
         create(data: UserCreate!): User
         delete(id: ID!): [User]
+        auth(email: String!, password: String!): Session!
+
     }
 `);
 
