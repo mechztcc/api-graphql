@@ -54,21 +54,33 @@ const usersResolvers = {
       return user;
     },
 
-    async delete(_, { id }) {
+    async delete(_, { id }, { userOptions }, info) {
+      const token = userOptions;
+
+      if (!token) {
+        throw Error("Authorization has been needed");
+      }
+
+      const { sub } = jwt.verify(token, secrets.hash);
+
+      await prisma.users.findUniqueOrThrow({
+        where: { id: Number(id) },
+      });
+
       await prisma.users.delete({ where: { id: Number(id) } });
       const users = prisma.users.findMany();
       return users;
     },
 
-    async auth(_, { email, password }) {
-      const user = await prisma.users.findUnique({ where: { email } });
+    async auth(parent, { email, password }, { userOptions }, info) {
+      const userExists = await prisma.users.findUnique({ where: { email } });
 
-      const verify = await argon2.verify(user.password, password);
+      const verify = await argon2.verify(userExists.password, password);
       if (!verify) {
       }
 
       const token = jwt.sign({}, secrets.hash, {
-        subject: String(user.id),
+        subject: String(userExists.id),
         expiresIn: "2d",
       });
 
