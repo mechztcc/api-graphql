@@ -1,90 +1,38 @@
 const { faker } = require("@faker-js/faker");
 const { PrismaClient } = require("@prisma/client");
+const argon2 = require("argon2");
 
 const prisma = new PrismaClient();
 
-let users = [
-  {
-    id: 1,
-    name: faker.name.firstName(),
-    second_name: faker.name.firstName(),
-    email: faker.internet.email(),
-    birth: faker.date.recent().toDateString(),
-    payment: faker.commerce.price(),
-    vip: false,
-    createdAt: new Date().toDateString(),
-    profile: 2,
-  },
-  {
-    id: faker.random.numeric(),
-    name: faker.name.firstName(),
-    second_name: faker.name.firstName(),
-    email: faker.internet.email(),
-    birth: faker.date.recent().toDateString(),
-    payment: faker.commerce.price(),
-    vip: false,
-    createdAt: new Date().toDateString(),
-    profile: 1,
-  },
-  {
-    id: faker.random.numeric(),
-    name: faker.name.firstName(),
-    second_name: faker.name.firstName(),
-    email: faker.internet.email(),
-    birth: faker.date.recent().toDateString(),
-    payment: faker.commerce.price(),
-    vip: false,
-    createdAt: new Date().toDateString(),
-    profile: 1,
-  },
-  {
-    id: faker.random.numeric(),
-    name: faker.name.firstName(),
-    second_name: faker.name.firstName(),
-    email: faker.internet.email(),
-    birth: faker.date.recent().toDateString(),
-    payment: faker.commerce.price(),
-    vip: false,
-    createdAt: new Date().toDateString(),
-    profile: 2,
-  },
-];
-
-const profiles = [
-  {
-    id: 1,
-    name: faker.word.adjective(),
-  },
-  {
-    id: 2,
-    name: faker.word.adjective(),
-  },
-];
-
 const usersResolvers = {
   User: {
-    profile(user) {
-      const profile = profiles.find((el) => el.id == user.profile);
+    async profile(user) {
+      const profile = await prisma.roles.findUnique({ where: { id: user.id } });
       return profile.name;
     },
-    createdAt() {
-      return new Date().toDateString();
+    createdAt(user) {
+      return new Date(user.createdAt).toDateString();
     },
   },
 
   Query: {
     users() {
+      const users = prisma.users.findMany();
       return users;
     },
 
     user(_, { id }) {
-      return users.find((el) => el.id == id);
+      const user = prisma.users.findUnique({ where: { id: Number(id) } });
+      return user;
     },
   },
 
   Mutation: {
     async create(_, { data }) {
-      const { name, second_name, email, birth, payment, vip, role } = data;
+      const { name, second_name, email, password, birth, payment, vip, role } =
+        data;
+
+      const hashedPass = await argon2.hash("password");
 
       const roleExists = await prisma.roles.findUnique({ where: { id: role } });
 
@@ -93,6 +41,7 @@ const usersResolvers = {
           name,
           second_name,
           email,
+          password: hashedPass,
           birth,
           payment,
           vip,
@@ -103,12 +52,9 @@ const usersResolvers = {
       return user;
     },
 
-    delete(_, { id }) {
-      const user = users.some((el) => el.id == id);
-      if (!user) {
-        throw new Error("User not found.");
-      }
-      users = users.filter((el) => el.id != id);
+    async delete(_, { id }) {
+      await prisma.users.delete({ where: { id: Number(id) } });
+      const users = prisma.users.findMany();
       return users;
     },
   },

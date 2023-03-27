@@ -3,20 +3,10 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-const roles = [
-  {
-    id: 1,
-    name: faker.word.adjective(),
-  },
-  {
-    id: 2,
-    name: faker.word.adjective(),
-  },
-];
-
 const rolesResolvers = {
   Query: {
-    roles() {
+    async roles() {
+      const roles = await prisma.roles.findMany();
       return roles;
     },
   },

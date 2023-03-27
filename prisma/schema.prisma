@@ -14,6 +14,7 @@ model Users {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   name        String?
+  password    String?
   second_name String
   birth       String
   payment     String
@@ -31,3 +32,4 @@ model Roles {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

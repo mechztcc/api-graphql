@@ -15,6 +15,7 @@ const userSchema = buildSchema(`
     input UserCreate {
         name: String!, 
         second_name: String!, 
+        password: String!
         email: String!, 
         birth: String!, 
         payment: String!, 
