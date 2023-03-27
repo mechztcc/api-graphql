@@ -17,10 +17,10 @@ model Users {
   second_name String
   birth       String
   payment     String
-  vip         String
+  vip         Boolean
   role        Roles    @relation(fields: [rolesId], references: [id])
   rolesId     Int
-  createdAt   DateTime
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
@@ -28,6 +28,6 @@ model Roles {
   id        Int      @id @default(autoincrement())
   name      String
   Users     Users[]
-  createdAt DateTime
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

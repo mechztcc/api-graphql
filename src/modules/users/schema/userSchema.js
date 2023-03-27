@@ -19,7 +19,7 @@ const userSchema = buildSchema(`
         birth: String!, 
         payment: String!, 
         vip: Boolean, 
-        profile: Int!
+        role: Int!
     }
 
     type Query {

@@ -1,4 +1,7 @@
 const { faker } = require("@faker-js/faker");
+const { PrismaClient } = require("@prisma/client");
+
+const prisma = new PrismaClient();
 
 let users = [
   {
@@ -80,24 +83,23 @@ const usersResolvers = {
   },
 
   Mutation: {
-    create(_, { data }) {
-      const { name, second_name, email, birth, payment, vip, profile } = data;
-      const emailExists = users.some((el) => el.email === email);
-      if (emailExists) {
-        throw new Error("Email already in use.");
-      }
+    async create(_, { data }) {
+      const { name, second_name, email, birth, payment, vip, role } = data;
 
-      const user = {
-        id: faker.random.numeric(),
-        name,
-        second_name,
-        email,
-        birth,
-        payment,
-        vip,
-        profile,
-      };
-      users.push(user);
+      const roleExists = await prisma.roles.findUnique({ where: { id: role } });
+
+      const user = prisma.users.create({
+        data: {
+          name,
+          second_name,
+          email,
+          birth,
+          payment,
+          vip,
+          rolesId: roleExists.id,
+        },
+      });
+
       return user;
     },
 
