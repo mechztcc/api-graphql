@@ -31,6 +31,7 @@ const usersResolvers = {
 
   Mutation: {
     async create(_, { data }) {
+      console.log(data);
       const { name, second_name, email, password, birth, payment, vip, role } =
         data;
 
@@ -75,8 +76,13 @@ const usersResolvers = {
     async auth(parent, { email, password }, { userOptions }, info) {
       const userExists = await prisma.users.findUnique({ where: { email } });
 
+      if (!userExists) {
+        throw Error("User not found");
+      }
+
       const verify = await argon2.verify(userExists.password, password);
       if (!verify) {
+        throw Error("Invalid Password / E-mail combination");
       }
 
       const token = jwt.sign({}, secrets.hash, {

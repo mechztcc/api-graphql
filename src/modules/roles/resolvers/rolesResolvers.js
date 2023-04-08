@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 const rolesResolvers = {
   Query: {
     async roles() {
+      console.log('aqui');
       const roles = await prisma.roles.findMany();
       return roles;
     },
